@@ -12,4 +12,11 @@ router.get("/about", function name(req, res, next) {
   });
 });
 
+router.get("/contact",function name(req, res, next) {
+  console.log("hitting this contact middleware")
+  res.render("contact", {
+    title: "StreamScript : a platform for collaborative coding ",
+  });
+})
+
 module.exports = router;
