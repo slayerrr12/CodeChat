@@ -14,7 +14,7 @@ router.get("/about", function name(req, res, next) {
   });
 });
 
-router.route("/contact");
+router.route("/contact").
 get(function name(req, res, next) {
   console.log("hitting this contact middleware");
   res.render("contact", {
