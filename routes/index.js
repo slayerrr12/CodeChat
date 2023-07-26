@@ -50,4 +50,16 @@ router.route('/contact')
     }
   });
 
+
+  render.get('/login', function (req , res ,next) {
+    res.render('login', {
+      title : 'login'
+    })
+  })
+  render.get('/registor', function (req , res ,next) {
+    res.render('registor', {
+      title : 'registor'
+    })
+  })
+
 module.exports = router;
