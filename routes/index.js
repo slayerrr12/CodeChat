@@ -21,7 +21,7 @@ router.route('/contact')
     req.checkBody('name', 'Empty name').notEmpty();
     req.checkBody('email', 'Invalid email').isEmail();
     req.checkBody('message', 'Empty message').notEmpty();
-    var errors = req.validationErrors();
+    var errors = req.getValidationResult();
 
     if (errors) {
       res.render('contact', {
