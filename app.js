@@ -7,13 +7,23 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 
 const index = require('./routes/index');
-const mongoose = require('mongooose');
+const mongoose = require('mongoose');
 const config = require('./config')
 
 
-mongoose.connect(config.dbConnectSting);
 
-global.user = require('./models/users');
+
+mongoose.connect(config.dbConnectSting, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).
+then(
+  ()=>console.log("connected"),
+).catch(error => {
+  console.error('MongoDB connection error:', error);
+});
+
+global.user = require('./models/user');
 
 const app = express();
 
@@ -40,6 +50,8 @@ app.use(function (req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
 
 // error handler
 app.use(function (err, req, res, next) {
