@@ -21,7 +21,7 @@ router.route('/contact')
     req.checkBody('name', 'Empty name').notEmpty();
     req.checkBody('email', 'Invalid email').isEmail();
     req.checkBody('message', 'Empty message').notEmpty();
-    var errors = req.getValidationResult();
+    var errors = req.validationErrors();
 
     if (errors) {
       res.render('contact', {
@@ -33,9 +33,9 @@ router.route('/contact')
       });
     } else {
       const mailoptions = {
-        from: 'Code4Share <no-reply@code4share.com>',
+        from: 'StreamScript no-reply@gmail.com',
         to: "eyeamarinsharma@gmail.com",
-        subject: 'You got a new message from the visitor',
+        subject: 'StreamScript Visitor Message',
         text: req.body.message
       }
       transporter.sendMail(mailoptions, function (error, info) {
