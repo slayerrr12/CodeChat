@@ -3,17 +3,22 @@ const crypto = require('crypto')
 
 
 
+
+
 const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        minlength: [3, "Username must be at least three characters long"]
+        , unique: true
+    }
+    ,
     email: {
         type: String,
         unique: true,
         required: true
     }
-    ,
-    name: {
-        type: String,
-        required: true
-    }
+
     ,
     hash: String,
     salt: String
