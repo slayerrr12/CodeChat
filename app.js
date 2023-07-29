@@ -6,22 +6,25 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 
-const index = require('./routes/index');
+const indexRoutes = require('./routes/index');
+const authRoutes = require('./routes/auth');
 const mongoose = require('mongoose');
+const passport = require('passport');
 const config = require('./config')
+const session = require('express-session');
 
-
+require('./passport')
 
 
 mongoose.connect(config.dbConnectSting, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).
-then(
-  ()=>console.log("connected"),
-).catch(error => {
-  console.error('MongoDB connection error:', error);
-});
+  then(
+    () => console.log("connected"),
+  ).catch(error => {
+    console.error('MongoDB connection error:', error);
+  });
 
 global.user = require('./models/user');
 
@@ -35,14 +38,23 @@ app.set('view engine', 'hbs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(cookieParser())
+app.use(session({
+  secret: config.sessionKey,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
+app.use(passport.initialize())
+app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-
+app.use('/', indexRoutes);
+app.use('/', authRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
