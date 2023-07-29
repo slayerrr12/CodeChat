@@ -2,7 +2,7 @@ const passport = require("../passport");
 const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
-const User = require('../models/user')
+const User = require("../models/user");
 
 router.get("/login", function (req, res, next) {
     res.render("login", {
@@ -23,28 +23,27 @@ router
                 .custom((value, { req }) => value === req.body.password)
                 .withMessage("Passwords do not match"),
         ],
-        function (req, res, next) {
+        async (req, res, next) => {
             const errors = validationResult(req);
-            if (!errors.isEmpty()) { // Fix: Check if errors are not empty
+            if (!errors.isEmpty()) {
                 res.render("register", {
                     name: req.body.name,
                     email: req.body.email,
-                    errorMessages: errors.array(), // Fix: Convert errors to an array
+                    errorMessages: errors,
                 });
             } else {
-                let user = new User();
-                user.name = req.body.name;
-                user.email = req.body.email;
-                user.setPassword(req.body.password); // Fix: Use 'password' instead of 'passport'
-                user.save(function (err) {
-                    if (err) {
-                        res.render("register", {
-                            errorMessages: err,
-                        });
-                    } else {
-                        res.redirect("/login");
-                    }
-                });
+                try {
+                    let user = new User();
+                    user.name = req.body.name;
+                    user.email = req.body.email;
+                    user.setPassword(req.body.password);
+                    await user.save(); // Use await with the save() method
+                    res.redirect("/login");
+                } catch (error) {
+                    res.render("register", {
+                        errorMessages: error,
+                    });
+                }
             }
         }
     )
@@ -54,5 +53,4 @@ router
         });
     });
 
-
-module.exports = router
+module.exports = router;
