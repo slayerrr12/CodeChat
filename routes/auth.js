@@ -24,17 +24,17 @@ router
         ],
         function (req, res, next) {
             const errors = validationResult(req);
-            if (errors) {
-                req.render("register", {
+            if (!errors.isEmpty()) { // Fix: Check if errors are not empty
+                res.render("register", {
                     name: req.body.name,
                     email: req.body.email,
-                    errorMessages: errors,
+                    errorMessages: errors.array(), // Fix: Convert errors to an array
                 });
             } else {
                 let user = new User();
                 user.name = req.body.name;
                 user.email = req.body.email;
-                user.setPassword(req.body.passport);
+                user.setPassword(req.body.password); // Fix: Use 'password' instead of 'passport'
                 user.save(function (err) {
                     if (err) {
                         res.render("register", {
@@ -47,7 +47,7 @@ router
             }
         }
     )
-    .get("/register", function (req, res, next) {
+    .get(function (req, res, next) {
         res.render("register", {
             title: "register",
         });
