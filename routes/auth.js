@@ -38,6 +38,7 @@ router
                     user.email = req.body.email;
                     user.setPassword(req.body.password);
                     await user.save(); // Use await with the save() method
+                    console.log("successfully registered")
                     res.redirect("/login");
                 } catch (error) {
                     res.render("register", {
