@@ -2,6 +2,7 @@ const passport = require("../passport");
 const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
+const User = require('../models/user')
 
 router.get("/login", function (req, res, next) {
     res.render("login", {
@@ -52,3 +53,6 @@ router
             title: "register",
         });
     });
+
+
+module.exports = router
