@@ -1,5 +1,5 @@
 const passport = require("passport");
-const user = require("./models/user");
+const User = require("./models/user");
 const LocalStrategy = require("passport-local").Strategy;
 
 passport.serializeUser(function (user, done) {
@@ -7,7 +7,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-    user.findOne({ _id: id }, function (err, user) {
+    User.findOne({ _id: id }, function (err, user) {
         done(err, user);
     });
 });
@@ -15,28 +15,33 @@ passport.deserializeUser(function (id, done) {
 passport.use(
     new LocalStrategy(
         {
-            usernameField: "email", // by default it is "username" but we want to use
+            usernameField: "email", // by default it is "username" but we want to use "email"
         },
         function (username, password, done) {
-            user.findOne(
+            User.findOne(
                 {
                     email: username,
                 },
-                function (err, done) {
+                function (err, foundUser) {
+                    // Changed 'done' to 'foundUser'
                     if (err) return done(err);
-                    if (!user) {
+                    if (!foundUser) {
+                        // Changed 'user' to 'foundUser'
                         return done(null, false, {
                             message: "incorrect username or password",
                         });
                     }
-                    if (!user.validPassword(password)) {
+                    if (!foundUser.validPassword(password)) {
+                        // Changed 'user' to 'foundUser'
                         return done(null, false, {
-                            message: "Incorrect ",
+                            message: "Incorrect password",
                         });
                     }
-                    return done(null, user);
+                    return done(null, foundUser); // Changed 'user' to 'foundUser'
                 }
             );
         }
     )
 );
+
+module.exports = passport;
