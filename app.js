@@ -4,7 +4,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const expressValidator = require('express-validator');
+
 
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
@@ -52,7 +52,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(function (req, res, next) {
+  if (req.isAuthenticated()) {
+    res.locals.user = req.user
+  }
+  next();
+})
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 
