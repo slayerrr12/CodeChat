@@ -4,7 +4,6 @@ const favicon = require("serve-favicon");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-
 const indexRoutes = require("./routes/index");
 const authRoutes = require("./routes/auth");
 const mongoose = require("mongoose");
@@ -12,7 +11,10 @@ const passport = require("passport");
 const config = require("./config");
 const session = require("express-session");
 
+
 require("./passport");
+
+
 
 mongoose
   .connect(config.dbConnectSting, {
@@ -42,7 +44,6 @@ app.use(
     secret: config.sessionKey,
     resave: false,
     saveUninitialized: true,
-   
   })
 );
 app.use(passport.initialize());
