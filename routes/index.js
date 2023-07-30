@@ -3,6 +3,7 @@ var router = express.Router();
 var nodemailer = require('nodemailer');
 var config = require('../config');
 var transporter = nodemailer.createTransport(config.mailer)
+const expressValidator = require('express-validator')
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
