@@ -18,19 +18,20 @@ router.route('/contact')
   .get(function (req, res, next) {
     res.render('contact', { title: 'Your Ultimate Code-Sharing Haven' });
   })
-  .post(body("name").isLength({ min: 3 })
-    , body("email").isLength({ min: 6 }),
-    body('username').isEmail(), function (req, res, next) {
-
+  .post(
+    body("name").isLength({ min: 3 }),
+    body("email").isEmail(),
+    body('username').isEmail(), // Corrected validation for the 'username' field
+    function (req, res, next) {
       const errors = validationResult(req);
 
-      if (errors) {
-        res.render('contact', {
+      if (!errors.isEmpty()) {
+        return res.render('contact', {
           title: 'Your Ultimate Code-Sharing Haven',
           name: req.body.name,
           email: req.body.email,
           message: req.body.message,
-          errorMessages: errors
+          errorMessages: errors.array()
         });
       } else {
         const mailoptions = {
@@ -41,15 +42,14 @@ router.route('/contact')
         }
         transporter.sendMail(mailoptions, function (error, info) {
           if (error) {
-            return console.log(error)
-
+            return console.log(error);
           }
           res.render('thank', { title: 'Your Ultimate Code-Sharing Haven' });
-        })
-
-
+        });
       }
-    });
+    }
+  );
+
 
 
 router.get('/login', function (req, res, next) {

@@ -1,9 +1,8 @@
 const passport = require("../passport");
 const express = require("express");
 const router = express.Router();
-const { query, validationResult, Result } = require('express-validator');
+const { query, validationResult, Result } = require("express-validator");
 const User = require("../models/user");
-const { Error } = require("mongoose");
 
 router
     .route("/login")
@@ -24,13 +23,12 @@ router
 router
     .route("/register")
     .post(
-        query('name').notEmpty(),
+        query("name").notEmpty(),
 
         query("password").isLength({ min: 6 }),
         async (req, res, next) => {
             const Errors = validationResult(req);
             if (!Errors.isEmpty()) {
-                console.log(`${Errors.array()}`)
                 res.render("register", {
                     errorMessages: Errors.array(),
                 });
