@@ -17,49 +17,49 @@ router.route('/contact')
   .get(function (req, res, next) {
     res.render('contact', { title: 'Your Ultimate Code-Sharing Haven' });
   })
-  .post(function (req, res, next) {
-    req.checkBody('name', 'Empty name').notEmpty();
-    req.checkBody('email', 'Invalid email').isEmail();
-    req.checkBody('message', 'Empty message').notEmpty();
-    var errors = req.validationErrors();
+  .post(expressValidator.body("name").isLength({ min: 3 })
+    , expressValidator.body("email").isLength({ min: 6 }),
+    body('username').isEmail(), function (req, res, next) {
 
-    if (errors) {
-      res.render('contact', {
-        title: 'Your Ultimate Code-Sharing Haven',
-        name: req.body.name,
-        email: req.body.email,
-        message: req.body.message,
-        errorMessages: errors
-      });
-    } else {
-      const mailoptions = {
-        from: 'StreamScript no-reply@gmail.com',
-        to: "eyeamarinsharma@gmail.com",
-        subject: 'StreamScript Visitor Message',
-        text: req.body.message
-      }
-      transporter.sendMail(mailoptions, function (error, info) {
-        if (error) {
-          return console.log(error)
+      const errors = validationErrors(req);
 
+      if (errors) {
+        res.render('contact', {
+          title: 'Your Ultimate Code-Sharing Haven',
+          name: req.body.name,
+          email: req.body.email,
+          message: req.body.message,
+          errorMessages: errors
+        });
+      } else {
+        const mailoptions = {
+          from: 'StreamScript no-reply@gmail.com',
+          to: "eyeamarinsharma@gmail.com",
+          subject: 'StreamScript Visitor Message',
+          text: req.body.message
         }
-        res.render('thank', { title: 'Your Ultimate Code-Sharing Haven' });
-      })
+        transporter.sendMail(mailoptions, function (error, info) {
+          if (error) {
+            return console.log(error)
+
+          }
+          res.render('thank', { title: 'Your Ultimate Code-Sharing Haven' });
+        })
 
 
-    }
-  });
+      }
+    });
 
 
-  router.get('/login', function (req , res ,next) {
-    res.render('login', {
-      title : 'login'
-    })
+router.get('/login', function (req, res, next) {
+  res.render('login', {
+    title: 'login'
   })
-  router.get('/register', function (req , res ,next) {
-    res.render('register', {
-      title : 'register'
-    })
+})
+router.get('/register', function (req, res, next) {
+  res.render('register', {
+    title: 'register'
   })
+})
 
 module.exports = router;
