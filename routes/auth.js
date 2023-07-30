@@ -12,39 +12,22 @@ router.get("/login", function (req, res, next) {
 
 router
     .route("/register")
-    .post(
-        [
-            body("name").notEmpty().withMessage("Empty Name"),
-            body("email").isEmail().withMessage("Invalid Email"),
-            body("password").notEmpty().withMessage("Empty Password"),
-            body("confirmPassword")
-                .notEmpty()
-                .withMessage("Empty Confirmation Password")
-                .custom((value, { req }) => value === req.body.password)
-                .withMessage("Passwords do not match"),
-        ],
-        async (req, res, next) => {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
+    .post(async (req, res, next) => {
+        
+        
+            try {
+                let user = new User();
+                user.name = req.body.name;
+                user.email = req.body.email;
+                user.setPassword(req.body.password);
+                await user.save(); // Use await with the save() method
+                console.log("successfully registered");
+                res.redirect("/login");
+            } catch (error) {
+                console.log(error)
                 res.render("register", {
-                    name: req.body.name,
-                    email: req.body.email,
-                    errorMessages: errors,
+                    errorMessages: error,
                 });
-            } else {
-                try {
-                    let user = new User();
-                    user.name = req.body.name;
-                    user.email = req.body.email;
-                    user.setPassword(req.body.password);
-                    await user.save(); // Use await with the save() method
-                    console.log("successfully registered")
-                    res.redirect("/login");
-                } catch (error) {
-                    res.render("register", {
-                        errorMessages: error,
-                    });
-                }
             }
         }
     )

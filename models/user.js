@@ -6,7 +6,7 @@ const crypto = require('crypto')
 
 
 const userSchema = new mongoose.Schema({
-    username: {
+    name: {
         type: String,
         required: true,
         minlength: [3, "Username must be at least three characters long"]
