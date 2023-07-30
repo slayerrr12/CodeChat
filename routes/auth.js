@@ -1,40 +1,49 @@
 const passport = require("../passport");
 const express = require("express");
 const router = express.Router();
-const { body, validationResult } = require("express-validator");
+const expressValidator = require("express-validator");
 const User = require("../models/user");
 
 router.get("/login", function (req, res, next) {
-    res.render("login", {
-        title: "login",
-    });
+  res.render("login", {
+    title: "login",
+  });
 });
 
 router
-    .route("/register")
-    .post(async (req, res, next) => {
-        
-        
-            try {
-                let user = new User();
-                user.name = req.body.name;
-                user.email = req.body.email;
-                user.setPassword(req.body.password);
-                await user.save(); // Use await with the save() method
-                console.log("successfully registered");
-                res.redirect("/login");
-            } catch (error) {
-                console.log(error)
-                res.render("register", {
-                    errorMessages: error,
-                });
-            }
-        }
-    )
-    .get(function (req, res, next) {
+  .route("/register")
+  .post(
+    expressValidator.body("name").isLength({ min: 3 }),
+
+    expressValidator.body("password").isLength({ min: 6 }),
+    async (req, res, next) => {
+      const Errors = expressValidator.validationResult(req);
+      if (!Errors.isEmpty()) {
         res.render("register", {
-            title: "register",
+          errorMessages: Errors.array(),
         });
+      }
+
+      try {
+        let user = new User();
+        user.name = req.body.name;
+        user.email = req.body.email;
+        user.setPassword(req.body.password);
+        await user.save(); // Use await with the save() method
+        console.log("successfully registered");
+        res.redirect("/login");
+      } catch (error) {
+        console.log(error);
+        res.render("register", {
+          errorMessages: error.errors,
+        });
+      }
+    }
+  )
+  .get(function (req, res, next) {
+    res.render("register", {
+      title: "register",
     });
+  });
 
 module.exports = router;
