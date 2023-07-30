@@ -1,7 +1,7 @@
 const passport = require("../passport");
 const express = require("express");
 const router = express.Router();
-const expressValidator = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
 
 router
@@ -23,9 +23,9 @@ router
 router
     .route("/register")
     .post(
-        expressValidator.body("name").isLength({ min: 3 }),
+        body("name").isLength({ min: 3 }),
 
-        expressValidator.body("password").isLength({ min: 6 }),
+        body("password").isLength({ min: 6 }),
         async (req, res, next) => {
             const Errors = expressValidator.validationResult(req);
             if (!Errors.isEmpty()) {
@@ -56,10 +56,9 @@ router
         });
     });
 
-
-router.get('/logout',function (req, res, next){
+router.get("/logout", function (req, res, next) {
     req.logout();
-    res.redirect('/')
-})
+    res.redirect("/");
+});
 
 module.exports = router;

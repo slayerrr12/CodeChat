@@ -3,7 +3,7 @@ var router = express.Router();
 var nodemailer = require('nodemailer');
 var config = require('../config');
 var transporter = nodemailer.createTransport(config.mailer)
-const expressValidator = require('express-validator')
+const { body, validationResult } = require('express-validator');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -18,11 +18,11 @@ router.route('/contact')
   .get(function (req, res, next) {
     res.render('contact', { title: 'Your Ultimate Code-Sharing Haven' });
   })
-  .post(expressValidator.body("name").isLength({ min: 3 })
-    , expressValidator.body("email").isLength({ min: 6 }),
+  .post(body("name").isLength({ min: 3 })
+    , body("email").isLength({ min: 6 }),
     body('username').isEmail(), function (req, res, next) {
 
-      const errors = validationErrors(req);
+      const errors = validationResult(req);
 
       if (errors) {
         res.render('contact', {
