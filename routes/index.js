@@ -21,7 +21,7 @@ router.route('/contact')
   .post(
     body("name").isLength({ min: 3 }).withMessage("must be of atleast 3 letters"),
     body("email").isEmail().withMessage("invalid email address"),
-    body('message').isEmpty().withMessage("message must not be empty"), // Corrected validation for the 'username' field
+    body('message').isLength({ min: 1 }).withMessage("message must not be empty"), // Corrected validation for the 'username' field
     function (req, res, next) {
       const errors = validationResult(req);
 
