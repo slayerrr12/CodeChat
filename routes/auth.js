@@ -24,12 +24,11 @@ router
     .route("/register")
     .post(
         query("name").notEmpty(),
-
         query("password").isLength({ min: 6 }),
         async (req, res, next) => {
             const Errors = validationResult(req);
             if (!Errors.isEmpty()) {
-                res.render("register", {
+                return res.render("register", {
                     errorMessages: Errors.array(),
                 });
             }
@@ -41,20 +40,21 @@ router
                 user.setPassword(req.body.password);
                 await user.save(); // Use await with the save() method
                 console.log("successfully registered");
-                res.redirect("/login");
+                return res.redirect("/login");
             } catch (error) {
                 console.log(error);
-                res.render("register", {
+                return res.render("register", {
                     errorMessages: error.errors,
                 });
             }
         }
-    )
-    .get(function (req, res, next) {
-        res.render("register", {
-            title: "register",
-        });
+    );
+
+router.route("/register").get(function (req, res, next) {
+    res.render("register", {
+        title: "register",
     });
+});
 
 router.get("/logout", function (req, res, next) {
     req.logout();
