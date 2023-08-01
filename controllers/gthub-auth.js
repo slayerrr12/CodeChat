@@ -60,3 +60,13 @@ router.get(
         res.redirect("/auth/github/success");
     }
 );
+
+router.get('/success', async (req, res) => {
+    const userInfo = {
+        id: req.session.passport.user.id,
+        displayName: req.session.passport.user.username,
+        provider: req.session.passport.user.provider,
+    };
+     res.render
+    }
+})
