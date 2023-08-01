@@ -51,23 +51,12 @@ passport.use(
     )
 );
 
-// Optional: You can serialize and deserialize the user (required for persistent login sessions)
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((obj, done) => done(null, obj));
+router.get("/", passport.authenticate("github", { scope: { user: email } }));
 
-// Controller actions
-
-// Initiate GitHub authentication
-exports.authGitHub = passport.authenticate("github");
-
-// GitHub authentication callback
-exports.authGitHubCallback = passport.authenticate("github", {
-    successRedirect: "/", // Replace with the URL you want to redirect after successful authentication
-    failureRedirect: "/login", // Replace with the URL for handling failed authentication
-});
-
-// Optional: Logout
-exports.logout = (req, res) => {
-    req.logout();
-    res.redirect("/"); // Redirect to the home page or any other page after logout
-};
+router.get(
+    "/callback",
+    passport.authenticate("github ", { failureRedirect: "/auth/github/error" }),
+    function (req, res) {
+        res.redirect("/auth/github/success");
+    }
+);
