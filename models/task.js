@@ -1,8 +1,8 @@
  const mongoose = require('mongoose');
 const { schema } = require('./user');
- const taskSchema = new mongoose.Schema ([
-
- ]);
+ const taskSchema = new mongoose.Schema ({
+    
+ });
 
 
 
