@@ -19,9 +19,9 @@ router.route('/contact')
     res.render('contact', { title: 'Your Ultimate Code-Sharing Haven' });
   })
   .post(
-    body("name").isLength({ min: 3 }),
-    body("email").isEmail(),
-    body('username').isEmail(), // Corrected validation for the 'username' field
+    body("name").isLength({ min: 3 }).withMessage("must be of atleast 3 letters"),
+    body("email").isEmail().withMessage("invalid email address"),
+    body('message').isEmpty().withMessage("message must not be empty"), // Corrected validation for the 'username' field
     function (req, res, next) {
       const errors = validationResult(req);
 
