@@ -1,7 +1,7 @@
 const passport = require("../passport");
 const express = require("express");
 const router = express.Router();
-const { query, validationResult, Result } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
 
 router
@@ -23,38 +23,40 @@ router
 router
     .route("/register")
     .post(
-        query("name").notEmpty(),
-        query("password").isLength({ min: 6 }),
+        body("name").notEmpty().withMessage("must not be empty"),
+        body("password")
+            .isLength({ min: 6 })
+            .withMessage("password is short , min length is 6"),
         async (req, res, next) => {
             const Errors = validationResult(req);
             if (!Errors.isEmpty()) {
+                console.log(Errors);
                 return res.render("register", {
                     errorMessages: Errors.array(),
                 });
-            }
-
-            try {
-                let user = new User();
-                user.name = req.body.name;
-                user.email = req.body.email;
-                user.setPassword(req.body.password);
-                await user.save(); // Use await with the save() method
-                console.log("successfully registered");
-                return res.redirect("/login");
-            } catch (error) {
-                console.log(error);
-                return res.render("register", {
-                    errorMessages: error.errors,
-                });
+            } else {
+                try {
+                    let user = new User();
+                    user.name = req.body.name;
+                    user.email = req.body.email;
+                    user.setPassword(req.body.password);
+                    await user.save(); // Use await with the save() method
+                    console.log("successfully registered");
+                    return res.redirect("/login");
+                } catch (error) {
+                    console.log(error);
+                    return res.render("register", {
+                        errorMessages: error.errors,
+                    });
+                }
             }
         }
-    );
-
-router.route("/register").get(function (req, res, next) {
-    res.render("register", {
-        title: "register",
+    )
+    .get(function (req, res, next) {
+        res.render("register", {
+            title: "register",
+        });
     });
-});
 
 router.get("/logout", function (req, res, next) {
     req.logout();
