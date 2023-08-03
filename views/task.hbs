@@ -47,11 +47,14 @@
         CodeMirror.fromTextArea(document.getElementById("code-screen"), {
             lineNumbers:
                 true, theme: "monokai"
-        }); const username = $("#chatbox-username").val(); if
+        }); 
+        
+        const username = $("#chatbox-username").val(); if
         (username === "") {
         const userId = Math.floor(Math.random() *
             9999).toString(); $("#chatbox-username").text(username);
-    } const userMessage =
+    }
+     const userMessage =
         function (name, text) {
             return (return (`<li class="media"> <div
   class="media-body" > <div class="media">' + '<div class="media-body"' + '<b>' +
