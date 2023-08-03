@@ -46,7 +46,7 @@
     theme: "monokai"
   });
 
-  let username = $("#chatbox-username").val();
+  var username = $("#chatbox-username").val();
   if(username === "") {
     const userId = Math.floor(Math.random() * 9999).toString();
     username = "User" + userId;
