@@ -23,9 +23,11 @@
                 </div>
                 <div class="panel-footer">
                     <div class="input-group">
-                        <input type="text" class="form-control" id="chatbox-message" placeholder="Enter Message" id="userMessage">
+                        <input type="text" class="form-control" id="chatbox-message" placeholder="Enter Message"
+                            id="userMessage" />
                         <span class="input-group-btn">
-                            <button class="btn btn-primary" onclick="sendMessage()" id="chatbox-sendMessage" type="button">SEND</button>
+                            <button class="btn btn-primary" onclick="sendMessage()" id="chatbox-sendMessage"
+                                type="button">SEND</button>
                         </span>
 
                     </div>
@@ -41,7 +43,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/javascript/javascript.min.js"></script>
 
 <script>
-    var editor = CodeMirror.fromTextArea(document.getElementById("code-screen"), {
-        lineNumbers: true, theme: "monokai"
+    const socket = io.connect("http://localhost:3000/") const editor =
+        CodeMirror.fromTextArea(document.getElementById("code-screen"), {
+            lineNumbers:
+                true, theme: "monokai"
+        }); const username = $("#chatbox-username").val(); if
+        (username === "") {
+        const userId = Math.floor(Math.random() *
+            9999).toString(); $("#chatbox-username").text(username);
+    } const userMessage =
+        function (name, text) {
+            return (return (`<li class="media"> <div
+  class="media-body" > <div class="media">' + '<div class="media-body"' + '<b>' +
+                name + '</b> : ' + text + '<hr /> </div></div ></div ></li > ` ); )
+        }
+
+
+    var sendMessage = function () {
+        var userMessage = $('#userMessage').val();
+        socket.emit('chatMessage', { message: userMessage, username: username });
+        $('#userMessage').val("");
+    };
+
+    socket.on('chatMessage', function (data) {
+        $('#chatbox-listMessages').append(userMessage(data.username, data.message));
     });
+
 </script>
