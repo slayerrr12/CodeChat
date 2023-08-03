@@ -34,6 +34,8 @@
   </div>
 </div>
 
+<input type="hidden" value=`{{roomId}}` id = "roomId" >
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/javascript/javascript.min.js"></script>
 
@@ -52,6 +54,8 @@
     username = "User" + userId;
     $("#chatbox-username").text(username);
   };
+
+  var roomId = $('#roomID').val();
 
   const userMessage = function(name, text) {
     return ('<li class="media"> <div class="media-body"> <div class="media">' +

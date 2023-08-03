@@ -9,7 +9,10 @@ module.exports = function (server) {
         });
 
         socket.on("chatMessage", function (data) {
-            io.emit("chatMessage", data);
+            io.to(socket.room).emit('chatMessage', data);
         });
+        socket.on('disconnect', function () {
+            socket.leave(socker.room)
+        })
     });
 };
