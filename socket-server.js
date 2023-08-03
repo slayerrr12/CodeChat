@@ -12,7 +12,7 @@ module.exports = function (server) {
             io.to(socket.room).emit('chatMessage', data);
         });
         socket.on('disconnect', function () {
-            socket.leave(socker.room)
+            socket.leave(socket.room)
         })
     });
 };
