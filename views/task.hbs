@@ -33,8 +33,7 @@
     </div>
   </div>
 </div>
-
-<input type="hidden" value=`{{roomId}}` id = "roomId" >
+<input type="hidden" value="{{roomId}}" id="roomId"/>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/javascript/javascript.min.js"></script>
@@ -42,23 +41,23 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
-  const socket = io.connect('http://localhost:3000');
-  const editor = CodeMirror.fromTextArea(document.getElementById("code-screen"), {
+  var socket = io.connect('http://localhost:3000');
+  var editor = CodeMirror.fromTextArea(document.getElementById("code-screen"), {
     lineNumbers: true,
     theme: "monokai"
   });
 
   var username = $("#chatbox-username").val();
   if(username === "") {
-    const userId = Math.floor(Math.random() * 9999).toString();
+    var userId = Math.floor(Math.random() * 9999).toString();
     username = "User" + userId;
     $("#chatbox-username").text(username);
   };
 
-  var roomId = $('#roomID').val();
-  socket.emit('joinRoom',{room : roomId})
+  var roomId = document.getElementById("roomId")
+  socket.emit('joinRoom', {room: roomId});
 
-  const userMessage = function(name, text) {
+  var userMessage = function(name, text) {
     return ('<li class="media"> <div class="media-body"> <div class="media">' +
       '<div class="media-body"' +
       '<b>' + name + '</b> : ' + text +
@@ -66,8 +65,8 @@
     );
   };
 
-  const sendMessage = function() {
-    const userMessage = $('#userMessage').val();
+  var sendMessage = function() {
+    var userMessage = $('#userMessage').val();
     socket.emit('chatMessage', {message: userMessage, username: username});
     $('#userMessage').val("");
   };
