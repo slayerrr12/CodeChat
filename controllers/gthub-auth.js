@@ -68,5 +68,5 @@ router.get('/success', async (req, res) => {
         provider: req.session.passport.user.provider,
     };
      res.render
-    }
+    
 })
