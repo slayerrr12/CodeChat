@@ -1,2 +1,2 @@
-# StreamScript
-Realtime Collaborative Code Editor With Video Streaming Support
+# CodeChat 
+Realtime Chat app with socket.io and express.js
