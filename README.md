@@ -1,2 +1,2 @@
 # FlowTalk
-Realtime Chat app with socket.io and express.js
+Realtime Chat  Web app with socket.io and express.js
